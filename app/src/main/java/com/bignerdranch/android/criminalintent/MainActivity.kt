@@ -2,9 +2,14 @@ package com.bignerdranch.android.criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.FragmentManager
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+private const val TAG = "MainActivity"
+
+class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -16,5 +21,16 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().add(R.id.fragment_container, fragment).commit()
         }
 
+    }
+
+    override fun onCrimeSelected(crimeId: UUID) {
+        //Log.d(TAG, "MainActivity.onCrimeSelected: $crimeId") debugging
+
+        val fragment = CrimeFragment.newInstance(crimeId)
+
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment).addToBackStack(null) //add to back stack makes it so when you press back its goes back and not home
+            .commit()
     }
 }
